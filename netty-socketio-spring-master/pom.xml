@@ -53,7 +53,7 @@
   </dependencies>
 
   <build>
-    <finalName>wss-server</finalName>
+    <finalName>jinrou</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
