@@ -30,8 +30,8 @@
                 var userName1 = 'user1_' + Math.floor((Math.random()*1000)+1);
                 var userName2 = 'user2_' + Math.floor((Math.random()*1000)+1);
 
-		var chat1Socket =  io.connect('http://localhost:9092/chat1');
-		var chat2Socket =  io.connect('http://localhost:9092/chat2');
+		var chat1Socket =  io.connect('http://47.106.105.47:9092/chat1');
+		var chat2Socket =  io.connect('http://47.106.105.47:9092/chat2');
 
                 function connectHandler(parentId) {
 			return function() {
