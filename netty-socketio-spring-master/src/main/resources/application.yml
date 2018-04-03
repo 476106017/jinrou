@@ -14,4 +14,4 @@ wss:
 
 server:
   port: 8008
-  context-path: /jinrou
+#  context-path: /jinrou
