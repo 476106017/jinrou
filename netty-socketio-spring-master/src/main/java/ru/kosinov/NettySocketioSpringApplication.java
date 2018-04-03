@@ -20,7 +20,7 @@ public class NettySocketioSpringApplication {
     @Bean
     public SocketIOServer socketIOServer() {
         Configuration config = new Configuration();
-        config.setHostname(host);
+//        config.setHostname(host);
         config.setPort(port);
         return new SocketIOServer(config);
     }
