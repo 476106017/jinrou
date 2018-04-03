@@ -6,12 +6,11 @@ wss:
 #spring.main.web_environment=false
 #spring.main.show_banner=false
 
-# 定位页面的目录到static/下
-spring:
-  mvc:
-    view:
-      prefix: /
-      suffix: .html
+#spring:
+#  mvc:
+#    view:
+#      prefix: /
+#      suffix: .html
 
 server:
   port: 8008
