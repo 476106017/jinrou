@@ -29,7 +29,7 @@
 
                 var userName = 'user' + Math.floor((Math.random()*1000)+1);
 
-		var socket =  io.connect('https://47.106.105.47:10443');
+		var socket =  io.connect('https://myserver.com:10443');
 
 		socket.on('connect', function() {
 			output('<span class="connect-msg">Client has connected to the server!</span>');
