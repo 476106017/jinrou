@@ -22,6 +22,7 @@ public class NettySocketioSpringApplication {
         Configuration config = new Configuration();
 //        config.setHostname(host);
         config.setPort(port);
+        config.getSocketConfig().setReuseAddress(true);
         return new SocketIOServer(config);
     }
 
