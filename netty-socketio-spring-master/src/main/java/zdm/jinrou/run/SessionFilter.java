@@ -1,7 +1,6 @@
-package ru.kosinov.run;
+package zdm.jinrou.run;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;

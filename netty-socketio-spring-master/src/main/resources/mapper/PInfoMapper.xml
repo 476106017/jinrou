@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zdm.jinrou.dao.PInfoMapper">
+  <resultMap id="BaseResultMap" type="zdm.jinrou.bean.PInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="p_name" jdbcType="VARCHAR" property="pName" />
+    <result column="p_login_name" jdbcType="VARCHAR" property="pLoginName" />
+    <result column="p_login_pwd" jdbcType="VARCHAR" property="pLoginPwd" />
+    <result column="p_score" jdbcType="INTEGER" property="pScore" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, p_name, p_login_name, p_login_pwd, p_score, create_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from p_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByQuery" parameterType="zdm.jinrou.bean.PInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from p_info
+    <where>
+      <if test="id!=null">
+        AND id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="pName != null">
+        AND p_name = #{pName}
+      </if>
+      <if test="pLoginName != null">
+        AND p_login_name = #{pLoginName}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from p_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="zdm.jinrou.bean.PInfo">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into p_info (id, p_name, p_login_name, 
+      p_login_pwd, p_score, create_at
+      )
+    values (#{id,jdbcType=BIGINT}, #{pName,jdbcType=VARCHAR}, #{pLoginName,jdbcType=VARCHAR}, 
+      #{pLoginPwd,jdbcType=VARCHAR}, #{pScore,jdbcType=INTEGER}, #{createAt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="zdm.jinrou.bean.PInfo">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into p_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="pName != null">
+        p_name,
+      </if>
+      <if test="pLoginName != null">
+        p_login_name,
+      </if>
+      <if test="pLoginPwd != null">
+        p_login_pwd,
+      </if>
+      <if test="pScore != null">
+        p_score,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=BIGINT},
+      <if test="pName != null">
+        #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pLoginName != null">
+        #{pLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="pLoginPwd != null">
+        #{pLoginPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="pScore != null">
+        #{pScore,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="zdm.jinrou.bean.PInfo">
+    update p_info
+    <set>
+      <if test="pName != null">
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pLoginName != null">
+        p_login_name = #{pLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="pLoginPwd != null">
+        p_login_pwd = #{pLoginPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="pScore != null">
+        p_score = #{pScore,jdbcType=INTEGER},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="zdm.jinrou.bean.PInfo">
+    update p_info
+    set p_name = #{pName,jdbcType=VARCHAR},
+      p_login_name = #{pLoginName,jdbcType=VARCHAR},
+      p_login_pwd = #{pLoginPwd,jdbcType=VARCHAR},
+      p_score = #{pScore,jdbcType=INTEGER},
+      create_at = #{createAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

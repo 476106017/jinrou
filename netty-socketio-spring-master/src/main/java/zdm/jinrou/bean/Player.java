@@ -1,4 +1,4 @@
-package ru.kosinov.bean;
+package zdm.jinrou.bean;
 
 import java.util.UUID;
 
@@ -11,12 +11,12 @@ public class Player {
   private UUID uuid;
   private Role role;
   private String name;
+  private Long pInfoId;
   private boolean banned;
 
-  public Player(UUID uuid) {
-    String name = Double.toString(Math.random()*10000).substring(5);
+  public Player(UUID uuid,Long pInfoId) {
     this.uuid = uuid;
-    this.name = name;
+    this.pInfoId = pInfoId;
     this.banned = false;
     this.role = Role.getRandRole();
   }
@@ -51,5 +51,13 @@ public class Player {
 
   public void setBanned(boolean banned) {
     this.banned = banned;
+  }
+
+  public Long getpInfoId() {
+    return pInfoId;
+  }
+
+  public void setpInfoId(Long pInfoId) {
+    this.pInfoId = pInfoId;
   }
 }

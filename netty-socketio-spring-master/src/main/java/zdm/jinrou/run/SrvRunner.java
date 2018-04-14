@@ -1,4 +1,4 @@
-package ru.kosinov.run;
+package zdm.jinrou.run;
 
 import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.beans.factory.annotation.Autowired;

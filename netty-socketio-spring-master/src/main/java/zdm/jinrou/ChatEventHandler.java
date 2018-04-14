@@ -1,4 +1,4 @@
-package ru.kosinov;
+package zdm.jinrou;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -6,16 +6,19 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
+import com.google.common.collect.Maps;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.kosinov.bean.ChatObject;
-import ru.kosinov.bean.Player;
-import ru.kosinov.bean.Role;
+import zdm.jinrou.bean.ChatObject;
+import zdm.jinrou.bean.PInfo;
+import zdm.jinrou.bean.Player;
+import zdm.jinrou.bean.Role;
+import zdm.jinrou.service.PlayerInfoService;
+import zdm.jinrou.util.IMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static ru.kosinov.bean.Role.WOLF;
 
 /**
  * Created by Kosinov_KV
@@ -26,19 +29,51 @@ public class ChatEventHandler {
 
     private final SocketIOServer server;
 
-    private Map<UUID,Player> playerMap = new HashMap<>();
+    private Map<UUID,Player> playerMap;
+
+    @Autowired
+    PlayerInfoService playerInfoService;
 
     @Autowired
     public ChatEventHandler(SocketIOServer server) {
         this.server = server;
+        playerMap = Maps.newHashMap();
     }
 
     @OnEvent(value = "chatevent")
     public void onEvent(SocketIOClient client, AckRequest request, ChatObject data) {
         UUID uuid = client.getSessionId();
+        String message = data.getMessage();
+        if(Strings.isBlank(data.getName())) {// 无TOKEN,判断是否登录
+            if(Strings.isNotBlank(message)){
+                String[] msplit = message.split(" ");
+                if(msplit.length == 3 && "login".equals(msplit[0])) {// 获取账号密码
+                    IMap login = playerInfoService.login(msplit[1], msplit[2]);
+                    if(login.isSuc()) {
+                        server.getClient(uuid).sendEvent("chatevent",
+                                new ChatObject("sys", "登录成功"));
+                        server.getClient(uuid).sendEvent("chatevent",
+                                new ChatObject("token", (String)login.getData()));
+                    }
+                    else
+                        server.getClient(uuid).sendEvent("chatevent",
+                                new ChatObject("sys", "登录失败:"+login.getMsg()));
+                }
+            }
+            server.getClient(uuid).sendEvent("chatevent", new ChatObject("sys", "请先登录"));
+            return;
+        }
+        PInfo pInfo = playerInfoService.getPInfoByToken(data.getName());
         Player player = playerMap.get(uuid);
+        if(pInfo==null){
+            server.getClient(uuid).sendEvent("chatevent", new ChatObject("sys", "该玩家不存在"));
+            return;
+        }else if(!pInfo.getId().equals(player.getpInfoId())){
+            server.getClient(uuid).sendEvent("chatevent", new ChatObject("sys", "玩家信息不匹配"));
+            return;
+        }
 
-        data.setUserName(player.getName());
+        data.setName(pInfo.getpName());
         if (player.isBanned())
             server.getClient(uuid).sendEvent("chatevent",new ChatObject("sys","你已被禁言"));
         else
@@ -48,7 +83,7 @@ public class ChatEventHandler {
     @OnConnect
     public void onConnect(SocketIOClient client) {
         UUID uuid = client.getSessionId();
-        Player player = new Player(uuid);
+        Player player = new Player(uuid,-1L);
         playerMap.put(uuid,player);
 
         server.getBroadcastOperations().sendEvent("chatevent",
@@ -56,8 +91,8 @@ public class ChatEventHandler {
         server.getClient(uuid).sendEvent("chatevent",
             new ChatObject("sys",player.getName()+",你的身份是"+player.getRole().getName()));
 
-        List<Player> wolfUsers = getRoleUsers(WOLF);
-        if(player.getRole()==WOLF)
+        List<Player> wolfUsers = getRoleUsers(Role.WOLF);
+        if(player.getRole()== Role.WOLF)
             wolfUsers.forEach(wolf->{
                 SocketIOClient c = server.getClient(wolf.getUuid());
                 if(c!=null)// 用户存在

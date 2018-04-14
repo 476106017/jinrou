@@ -1,4 +1,4 @@
-package ru.kosinov.bean;
+package zdm.jinrou.bean;
 
 /**
  * @author zengdongming

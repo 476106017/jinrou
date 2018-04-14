@@ -28,17 +28,20 @@
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
 	<script>
+        var serverUrl = 'ws://localhost:9092';
+        var socket =  io.connect(serverUrl);
 
-        var userName = 'user' + Math.floor((Math.random()*1000)+1);
-
-		var socket =  io.connect('ws://47.106.105.47:9092');
+		var name;
 
 		socket.on('connect', function() {
 			output('<span class="connect-msg">Client has connected to the server!</span>');
 		});
 
 		socket.on('chatevent', function(data) {
-			output('<span class="username-msg">' + data.userName + ':</span> ' + data.message);
+		    if(data.name=='token')
+                name = data.message;
+		    else
+			    output('<span class="username-msg">' + data.name + ':</span> ' + data.message);
 		});
 
 		socket.on('disconnect', function() {
@@ -50,17 +53,17 @@
                 }
 
 		function sendMessage() {
-                        var message = $('#msg').val();
-                        $('#msg').val('');
+            var message = $('#msg').val();
+            $('#msg').val('');
 
-                        var jsonObject = {userName: userName,
-                                          message: message};
-                        socket.emit('chatevent', jsonObject);
+            var jsonObject = {name: name,
+                              message: message};
+            socket.emit('chatevent', jsonObject);
 		}
 
 		function output(message) {
-                        var currentTime = "<span class='time'>" +  moment().format('HH:mm:ss.SSS') + "</span>";
-                        var element = $("<div>" + currentTime + " " + message + "</div>");
+            var currentTime = "<span class='time'>" +  moment().format('HH:mm:ss.SSS') + "</span>";
+            var element = $("<div>" + currentTime + " " + message + "</div>");
 			$('#console').prepend(element);
 		}
 

@@ -1,7 +1,7 @@
 wss:
   server:
     port: 9092
-    host: myserver.com
+    host: 0.0.0.0
 
 #spring.main.web_environment=false
 #spring.main.show_banner=false
@@ -12,6 +12,50 @@ wss:
 #      prefix: /
 #      suffix: .html
 
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+  mapperLocations: classpath:mapper/*.xml
+
 server:
   port: 8008
 #  context-path: /jinrou
+
+spring:
+  datasource:
+    url: jdbc:mariadb://47.106.105.47:3306/jinrou
+    username: root
+    password: 471065
+    driver-class-name: org.mariadb.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  freemarker:
+    allow-request-override: false
+    allow-session-override: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: true
+    settings.number_format: 0.##
+    prefix:
+    request-context-attribute:
+    suffix:
+    cache: false
+    template-loader-path: classpath:/templates/
+  redis:
+    host: 47.106.105.47
+    port: 6379
+    password: 471065
+    database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+    timeout: 1000
+  cache:
+    cache-names:
+    type: redis

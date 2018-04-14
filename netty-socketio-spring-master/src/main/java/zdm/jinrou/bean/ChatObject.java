@@ -1,4 +1,4 @@
-package ru.kosinov.bean;
+package zdm.jinrou.bean;
 
 /**
  * Created by Kosinov_KV
@@ -6,23 +6,24 @@ package ru.kosinov.bean;
  */
 public class ChatObject {
 
-    private String userName;
+    private String name;
     private String message;
 
     public ChatObject() {
     }
 
-    public ChatObject(String userName, String message) {
+    public ChatObject(String name, String message) {
         super();
-        this.userName = userName;
+        this.name = name;
         this.message = message;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMessage() {
